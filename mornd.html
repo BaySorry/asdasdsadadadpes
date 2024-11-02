@@ -112,7 +112,6 @@
             color: black;
             cursor: not-allowed;
         }
-
         /* Formation positions for 4-2-4 */
         .lw { top: 50px; left: 100px; }
         .st1 { top: 50px; left: 200px; }
@@ -125,7 +124,6 @@
         .cb2 { top: 370px; left: 300px; }
         .rb { top: 370px; left: 450px; }
         .gk { top: 500px; left: 250px; }
-
         /* Modal styling */
         .modal {
             display: none; /* Başlangıçta gizli */
@@ -136,9 +134,13 @@
             background-color: rgba(0, 255, 99, 0.13); /* Background color */
             z-index: 1000;
             transition: background-color 0.5s ease; /* Geçiş efekti */
+            overflow-y: auto;
+            max-height: 80%; /* Modal'da içerik aşımını önlemek için */
         }
         .modal.show {
             display: flex; /* Modal'ı göster */
+            flex-wrap: wrap; /* Resimleri yan yana diz */
+            justify-content: center; /* Merkeze yerleştir */
         }
         .modal img {
             width: 80px;
@@ -147,45 +149,18 @@
             cursor: pointer;
         }
 
-        /* Mobile adjustments */
-        @media (max-width: 768px) { /* Target mobile devices */
-            body {
-                padding: 20px; /* Add padding for better spacing */
-            }
-
+        /* Mobile styles */
+        @media (max-width: 768px) {
             .field-container {
-                width: calc(100% - 40px); /* Full width minus padding */
-                height: auto; /* Allow height to adjust */
-                margin: 0 auto; /* Center the field on mobile */
+                width: 90%; /* Mobile width */
+                height: auto; /* Let it adjust */
             }
-
             .player-card {
-                width: 80px; /* Smaller player cards for mobile */
-                height: 120px;
-                font-size: 1em; /* Smaller text for better fit */
+                width: 70px; /* Adjust player card size for mobile */
+                height: 100px;
             }
-
             h1 {
-                font-size: 1.5em; /* Smaller heading on mobile */
-            }
-
-            .loading-bar-container {
-                width: 90%; /* Increase loading bar width for mobile */
-            }
-            
-            #loading-text, #percentage-text {
-                font-size: 1em; /* Smaller text on mobile */
-            }
-
-            /* Modal adjustments for mobile */
-            .modal {
-                width: 90%; /* Modal width for mobile */
-                padding: 10px; /* Padding inside modal */
-            }
-
-            .modal img {
-                width: 60px; /* Smaller images in the modal */
-                height: auto; /* Maintain aspect ratio */
+                font-size: 1.5em; /* Smaller title for mobile */
             }
         }
     </style>
@@ -225,59 +200,94 @@
         "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
         "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
         "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
-        "sağ-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
-        "gobek": Array.from({ length: 8 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
-        "stoper": Array.from({ length: 8 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stoperler/${i+1}.png`),
-        "kaleci": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
+        "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
+        "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
+        "stoper": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
+        "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
     };
 
-    let loadingPercentage = 0;
+    const selectedPlayers = { // To track selected players per position
+        "santrafor": [], // Allow multiple selections for strikers
+        "gobek": null,
+        "sol-kanat": null,
+        "sağ-kanat": null,
+        "sol-bek": null,
+        "sağ-bek": null,
+        "stoper": null,
+        "kaleci": null,
+    };
 
-    function updateLoadingBar() {
-        loadingPercentage += Math.random() * 10;
-        loadingPercentage = Math.min(loadingPercentage, 100); // Max 100%
-        document.getElementById('loading-bar').style.width = loadingPercentage + '%';
-        document.getElementById('percentage-text').innerText = Math.round(loadingPercentage) + '%';
-        
-        if (loadingPercentage < 100) {
-            setTimeout(updateLoadingBar, 100); // Repeat until 100%
-        } else {
-            document.getElementById('splash-screen').style.display = 'none'; // Hide splash screen
-            document.getElementById('field-container').style.display = 'block'; // Show field container
-        }
+    function startLoading() {
+        const loadingBar = document.getElementById("loading-bar");
+        const percentageText = document.getElementById("percentage-text");
+        let width = 0;
+
+        const loadingInterval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(loadingInterval);
+                setTimeout(() => {
+                    document.getElementById("start-button").style.display = "block"; // Başla butonunu göster
+                }, 500); // Kısa bir gecikme
+            } else {
+                width++;
+                loadingBar.style.width = width + "%";
+                percentageText.innerText = width + "%"; // Yüzde metnini güncelle
+            }
+        }, 50); // Her 50 ms'de bir yükleme çubuğunu güncelle
     }
 
     function startGame() {
-        document.getElementById('field-container').style.display = 'block'; // Show field container
-        document.getElementById('splash-screen').style.display = 'none'; // Hide splash screen
+        document.getElementById("splash-screen").style.display = "none"; // Açılış ekranını gizle
+        document.getElementById("field-container").style.display = "block"; // Oyun alanını göster
     }
 
-    function selectPlayer(card, position) {
-        if (!card.classList.contains('selected')) {
-            card.classList.add('selected');
-            showPlayerImages(position);
+    function selectPlayer(cardElement, position) {
+        const modal = document.getElementById("modal");
+        modal.innerHTML = ""; // Modal'ı temizle
+        modal.classList.add("show"); // Modal'ı göster
+
+        const photos = playerPhotos[position];
+        const selectedPhotos = [];
+
+        // Filter out already selected players for the modal options
+        const allSelectedPhotos = Object.values(selectedPlayers).flat();
+        const availablePhotos = photos.filter(photo => !allSelectedPhotos.includes(photo));
+
+        // Randomly select up to 4 unique photos for the modal from available ones
+        while (selectedPhotos.length < Math.min(4, availablePhotos.length)) {
+            const randomIndex = Math.floor(Math.random() * availablePhotos.length);
+            const photo = availablePhotos[randomIndex];
+            if (!selectedPhotos.includes(photo)) {
+                selectedPhotos.push(photo);
+            }
         }
-    }
 
-    function showPlayerImages(position) {
-        const modal = document.getElementById('modal');
-        modal.innerHTML = ''; // Clear existing images
-        playerPhotos[position].forEach(url => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.onclick = () => selectPlayerImage(url); // Handle image selection
+        selectedPhotos.forEach(photo => {
+            const img = document.createElement("img");
+            img.src = photo;
+            img.onclick = () => finalizeSelection(cardElement, position, photo);
             modal.appendChild(img);
         });
-        modal.classList.add('show'); // Show modal
     }
 
-    function selectPlayerImage(url) {
-        alert('Selected Player: ' + url); // Here you can add your selection logic
-        document.getElementById('modal').classList.remove('show'); // Hide modal
+    function finalizeSelection(cardElement, position, selectedPhoto) {
+        cardElement.classList.add("selected");
+        cardElement.style.backgroundImage = `url(${selectedPhoto})`;
+        cardElement.innerText = ""; // Hide the position text
+
+        // Allow multiple selections for strikers
+        if (position === "santrafor") {
+            selectedPlayers[position].push(selectedPhoto); // Store the selected player
+        } else {
+            // Ensure only one selection per position for others
+            selectedPlayers[position] = selectedPhoto; // Save the selected player for the specific position
+        }
+
+        document.getElementById("modal").classList.remove("show"); // Modal'ı gizle
     }
 
-    // Start loading bar
-    updateLoadingBar();
+    // Sayfa yüklendiğinde yükleme işlemini başlat
+    window.onload = startLoading; 
 </script>
 
 </body>
