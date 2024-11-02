@@ -112,6 +112,7 @@
             color: black;
             cursor: not-allowed;
         }
+
         /* Formation positions for 4-2-4 */
         .lw { top: 50px; left: 100px; }
         .st1 { top: 50px; left: 200px; }
@@ -124,6 +125,7 @@
         .cb2 { top: 370px; left: 300px; }
         .rb { top: 370px; left: 450px; }
         .gk { top: 500px; left: 250px; }
+
         /* Modal styling */
         .modal {
             display: none; /* Başlangıçta gizli */
@@ -144,6 +146,34 @@
             margin: 5px;
             cursor: pointer;
         }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .field-container {
+                width: 90%; /* Make the field container responsive */
+                height: auto; /* Let height adjust */
+                padding: 10px;
+            }
+            .player-card {
+                width: 80px; /* Smaller player card size */
+                height: 110px;
+                font-size: 0.9em; /* Adjust font size */
+            }
+            .lw { top: 30px; left: 10%; }
+            .st1 { top: 30px; left: 30%; }
+            .st2 { top: 30px; left: 50%; }
+            .rw { top: 30px; left: 70%; }
+            .cm1 { top: 120px; left: 15%; }
+            .cm2 { top: 120px; left: 55%; }
+            .lb { top: 220px; left: 5%; }
+            .cb1 { top: 220px; left: 30%; }
+            .cb2 { top: 220px; left: 55%; }
+            .rb { top: 220px; left: 85%; }
+            .gk { top: 330px; left: 40%; }
+            h1 {
+                font-size: 1.5em; /* Adjust heading size */
+            }
+        }
     </style>
 </head>
 <body>
@@ -159,7 +189,7 @@
 </div>
 
 <div class="field-container" id="field-container">
-    <h1>FUT Draft Oyunu - 4-2-4 Dizilişi</h1>
+    <h1>MoRnD</h1>
     <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
     <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
     <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
