@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft</title>
+    <style>
+        /* Page styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            margin: 0;
+            height: 100vh;
+            justify-content: center;
+            overflow: hidden;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #FFD700;
+        }
+
+        /* Splash screen styling */
+        #splash-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: url('https://github.com/BaySorry/asdasdsadadadpes/blob/main/MoRnD-DRAFT.png?raw=true');
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            z-index: 1000; /* Splash screen üstte olacak */
+        }
+
+        .loading-bar-container {
+            width: 80%;
+            max-width: 300px;
+            background-color: #555;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .loading-bar {
+            height: 20px;
+            width: 0;
+            background-color: #FFD700;
+            transition: width 0.5s ease;
+        }
+
+        #loading-text {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #FFD700;
+        }
+
+        #start-button {
+            display: none; /* Başla butonu gizli */
+            padding: 10px 20px;
+            font-size: 1em;
+            color: black;
+            background-color: #FFD700;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #percentage-text {
+            font-size: 1.2em;
+            color: #FFD700;
+        }
+
+        /* Field container styling */
+        .field-container {
+            background-image: url('https://www.example.com/field-background.jpg'); /* Replace with actual field background URL */
+            background-size: cover;
+            padding: 20px;
+            border-radius: 15px;
+            width: 600px;
+            height: 700px;
+            position: relative;
+            display: none; /* Başlangıçta gizli */
+        }
+
+        /* Player card styling */
+        .player-card {
+            width: 100px;
+            height: 140px;
+            background-color: #1f1f1f;
+            border: 3px solid #3fa64a; /* Green outline */
+            border-radius: 10px;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            background-size: cover;
+        }
+        .player-card.selected {
+            background-color: #FFD700; /* Selected card in gold */
+            color: black;
+            cursor: not-allowed;
+        }
+        /* Formation positions for 4-2-4 */
+        .lw { top: 50px; left: 100px; }
+        .st1 { top: 50px; left: 200px; }
+        .st2 { top: 50px; left: 300px; }
+        .rw { top: 50px; left: 400px; }
+        .cm1 { top: 200px; left: 150px; }
+        .cm2 { top: 200px; left: 350px; }
+        .lb { top: 370px; left: 50px; }
+        .cb1 { top: 370px; left: 200px; }
+        .cb2 { top: 370px; left: 300px; }
+        .rb { top: 370px; left: 450px; }
+        .gk { top: 500px; left: 250px; }
+        /* Modal styling */
+        .modal {
+            display: none; /* Başlangıçta gizli */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 255, 99, 0.13); /* Background color */
+            z-index: 1000;
+            transition: background-color 0.5s ease; /* Geçiş efekti */
+        }
+        .modal.show {
+            display: flex; /* Modal'ı göster */
+        }
+        .modal img {
+            width: 80px;
+            height: 120px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Açılış ekranı -->
+<div id="splash-screen">
+    <div class="loading-bar-container">
+        <div class="loading-bar" id="loading-bar"></div>
+    </div>
+    <div id="loading-text">Loading...</div>
+    <button id="start-button" onclick="startGame()">Başla</button>
+    <div id="percentage-text">0%</div> <!-- Yüzde metni -->
+</div>
+
+<div class="field-container" id="field-container">
+    <h1>FUT Draft Oyunu - 4-2-4 Dizilişi</h1>
+    <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
+    <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
+    <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
+    <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
+    <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
+    <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
+    <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
+    <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
+    <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
+    <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
+    <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
+</div>
+
+<div id="modal" class="modal"></div> <!-- Başlangıçta görünmez -->
+
+<script>
+    const playerPhotos = {
+        "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20kanatlar/${i+1}.png`),
+        "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
+        "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
+        "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
+        "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
+        "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
+        "stoper": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
+        "kaleci": Array.from({ length: 8 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
+    };
+
+    const selectedPlayers = new Set(); // To track selected players
+
+    function startLoading() {
+        const loadingBar = document.getElementById("loading-bar");
+        const percentageText = document.getElementById("percentage-text");
+        let width = 0;
+
+        const loadingInterval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(loadingInterval);
+                setTimeout(() => {
+                    document.getElementById("start-button").style.display = "block"; // Başla butonunu göster
+                }, 500); // Kısa bir gecikme
+            } else {
+                width++;
+                loadingBar.style.width = width + "%";
+                percentageText.innerText = width + "%"; // Yüzde metnini güncelle
+            }
+        }, 50); // Her 50 ms'de bir yükleme çubuğunu güncelle
+    }
+
+    function startGame() {
+        document.getElementById("splash-screen").style.display = "none"; // Açılış ekranını gizle
+        document.getElementById("field-container").style.display = "block"; // Oyun alanını göster
+    }
+
+    function selectPlayer(cardElement, position) {
+        if (cardElement.classList.contains('selected')) return;
+
+        const modal = document.getElementById("modal");
+        modal.innerHTML = ""; // Modal'ı temizle
+        modal.classList.add("show"); // Modal'ı göster
+        
+        const photos = playerPhotos[position];
+        const selectedPhotos = [];
+        
+        while (selectedPhotos.length < 4) {
+            const randomIndex = Math.floor(Math.random() * photos.length);
+            const photo = photos[randomIndex];
+            
+            // Check if the player has already been selected
+            if (!selectedPlayers.has(photo)) {
+                selectedPhotos.push(photo);
+                selectedPlayers.add(photo); // Add the player to the selected set
+            }
+            
+            // If we can't find enough unique players, break to avoid infinite loop
+            if (selectedPhotos.length >= photos.length) {
+                break;
+            }
+        }
+
+        selectedPhotos.forEach(photo => {
+            const img = document.createElement("img");
+            img.src = photo;
+            img.onclick = () => finalizeSelection(cardElement, photo);
+            modal.appendChild(img);
+        });
+    }
+
+    function finalizeSelection(cardElement, selectedPhoto) {
+        cardElement.classList.add("selected");
+        cardElement.style.backgroundImage = `url(${selectedPhoto})`;
+        cardElement.innerText = "";
+        
+        document.getElementById("modal").classList.remove("show"); // Modal'ı gizle
+    }
+
+    // Sayfa yüklendiğinde yükleme işlemini başlat
+    window.onload = startLoading; 
+</script>
+
+</body>
+</html>
