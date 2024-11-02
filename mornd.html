@@ -36,7 +36,7 @@
             height: 100vh;
             width: 100vw;
             position: absolute;
-            z-index: 1000;
+            z-index: 1000; 
         }
 
         .loading-bar-container {
@@ -82,20 +82,20 @@
         .field-container {
             background-image: url('https://www.example.com/field-background.jpg'); 
             background-size: cover;
-            padding: 20px;
+            padding: 10px;
             border-radius: 15px;
-            width: 600px;
-            height: 700px;
+            width: 90%;
+            height: auto; /* Auto height to fit content */
             position: relative;
             display: none; 
         }
 
         /* Player card styling */
         .player-card {
-            width: 100px;
-            height: 140px;
+            width: 80px; /* Smaller width for mobile */
+            height: 120px; /* Fixed height */
             background-color: #1f1f1f;
-            border: 3px solid #3fa64a; 
+            border: 3px solid #3fa64a;
             border-radius: 10px;
             position: absolute;
             display: flex;
@@ -103,7 +103,7 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1em; /* Smaller font size */
             cursor: pointer;
             background-size: cover;
         }
@@ -112,19 +112,18 @@
             color: black;
             cursor: not-allowed;
         }
-
-        /* Formation positions for 4-2-4 (desktop) */
-        .lw { top: 50px; left: 100px; }
-        .st1 { top: 50px; left: 200px; }
-        .st2 { top: 50px; left: 300px; }
-        .rw { top: 50px; left: 400px; }
-        .cm1 { top: 200px; left: 150px; }
-        .cm2 { top: 200px; left: 350px; }
-        .lb { top: 370px; left: 50px; }
-        .cb1 { top: 370px; left: 200px; }
-        .cb2 { top: 370px; left: 300px; }
-        .rb { top: 370px; left: 450px; }
-        .gk { top: 500px; left: 250px; }
+        /* Formation positions for 4-2-4 with mobile adjustments */
+        .lw { top: 20px; left: 10%; }
+        .st1 { top: 20px; left: 35%; }
+        .st2 { top: 20px; left: 60%; }
+        .rw { top: 20px; left: 80%; }
+        .cm1 { top: 120px; left: 20%; }
+        .cm2 { top: 120px; left: 65%; }
+        .lb { top: 220px; left: 5%; }
+        .cb1 { top: 220px; left: 35%; }
+        .cb2 { top: 220px; left: 60%; }
+        .rb { top: 220px; left: 85%; }
+        .gk { top: 320px; left: 40%; }
 
         /* Modal styling */
         .modal {
@@ -133,63 +132,62 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 255, 99, 0.13); 
+            background-color: rgba(0, 255, 99, 0.13);
             z-index: 1000;
-            transition: background-color 0.5s ease; 
+            transition: background-color 0.5s ease;
         }
         .modal.show {
             display: flex; 
         }
         .modal img {
-            width: 80px;
-            height: 120px;
+            width: 60px; /* Smaller images for mobile */
+            height: 90px;
             margin: 5px;
             cursor: pointer;
         }
 
-        /* Responsive styles for mobile */
-        @media (max-width: 768px) {
+        /* Media query for landscape mode */
+        @media only screen and (orientation: landscape) {
+            body {
+                height: auto; /* Allow height to grow */
+            }
             .field-container {
-                width: 100%;
-                height: auto;
-                padding: 10px;
+                height: auto; /* Allow height to grow */
             }
-
             .player-card {
-                width: 80px;
-                height: 120px;
-                font-size: 0.9em;
+                width: 100px; /* Reset width for landscape */
+                height: 140px; /* Reset height for landscape */
+                font-size: 1.1em; /* Reset font size for landscape */
             }
-
-            /* Formation positions for mobile */
-            .lw { top: 10%; left: 15%; }
-            .st1 { top: 10%; left: 30%; }
-            .st2 { top: 10%; left: 50%; }
-            .rw { top: 10%; left: 70%; }
-            .cm1 { top: 30%; left: 25%; }
-            .cm2 { top: 30%; left: 55%; }
-            .lb { top: 50%; left: 10%; }
-            .cb1 { top: 50%; left: 30%; }
-            .cb2 { top: 50%; left: 50%; }
-            .rb { top: 50%; left: 80%; }
-            .gk { top: 70%; left: 40%; }
+            /* Adjust positions */
+            .lw { top: 50px; left: 100px; }
+            .st1 { top: 50px; left: 200px; }
+            .st2 { top: 50px; left: 300px; }
+            .rw { top: 50px; left: 400px; }
+            .cm1 { top: 200px; left: 150px; }
+            .cm2 { top: 200px; left: 350px; }
+            .lb { top: 370px; left: 50px; }
+            .cb1 { top: 370px; left: 200px; }
+            .cb2 { top: 370px; left: 300px; }
+            .rb { top: 370px; left: 450px; }
+            .gk { top: 500px; left: 250px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Splash Screen -->
+<!-- Açılış ekranı -->
 <div id="splash-screen">
     <div class="loading-bar-container">
         <div class="loading-bar" id="loading-bar"></div>
     </div>
     <div id="loading-text">Loading...</div>
     <button id="start-button" onclick="startGame()">Başla</button>
-    <div id="percentage-text">0%</div>
+    <div id="percentage-text">0%</div> 
 </div>
 
 <div class="field-container" id="field-container">
-    <h1>MoRnD DRAFT</h1>
+    <h1>FUT Draft Oyunu - 4-2-4 Dizilişi</h1>
     <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
     <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
     <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
@@ -203,7 +201,7 @@
     <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
 </div>
 
-<div id="modal" class="modal"></div>
+<div id="modal" class="modal"></div> 
 
 <script>
     const playerPhotos = {
@@ -217,7 +215,7 @@
         "kaleci": Array.from({ length: 8 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
     };
 
-    const selectedPlayers = new Set();
+    const selectedPlayers = new Set(); 
 
     function startLoading() {
         const loadingBar = document.getElementById("loading-bar");
@@ -229,13 +227,13 @@
                 clearInterval(loadingInterval);
                 setTimeout(() => {
                     document.getElementById("start-button").style.display = "block"; 
-                }, 500);
+                }, 500); 
             } else {
                 width++;
                 loadingBar.style.width = width + "%";
                 percentageText.innerText = width + "%"; 
             }
-        }, 50);
+        }, 50); 
     }
 
     function startGame() {
@@ -283,7 +281,6 @@
         document.getElementById("modal").classList.remove("show"); 
     }
 
-    // Sayfa yüklendiğinde yükleme işlemini başlat
     window.onload = startLoading; 
 </script>
 
