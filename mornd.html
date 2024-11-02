@@ -36,7 +36,7 @@
             height: 100vh;
             width: 100vw;
             position: absolute;
-            z-index: 1000; /* Splash screen üstte olacak */
+            z-index: 1000;
         }
 
         .loading-bar-container {
@@ -62,7 +62,7 @@
         }
 
         #start-button {
-            display: none; /* Başla butonu gizli */
+            display: none; 
             padding: 10px 20px;
             font-size: 1em;
             color: black;
@@ -80,14 +80,14 @@
 
         /* Field container styling */
         .field-container {
-            background-image: url('https://www.example.com/field-background.jpg'); /* Replace with actual field background URL */
+            background-image: url('https://www.example.com/field-background.jpg'); 
             background-size: cover;
             padding: 20px;
             border-radius: 15px;
             width: 600px;
             height: 700px;
             position: relative;
-            display: none; /* Başlangıçta gizli */
+            display: none; 
         }
 
         /* Player card styling */
@@ -95,7 +95,7 @@
             width: 100px;
             height: 140px;
             background-color: #1f1f1f;
-            border: 3px solid #3fa64a; /* Green outline */
+            border: 3px solid #3fa64a; 
             border-radius: 10px;
             position: absolute;
             display: flex;
@@ -108,11 +108,12 @@
             background-size: cover;
         }
         .player-card.selected {
-            background-color: #FFD700; /* Selected card in gold */
+            background-color: #FFD700; 
             color: black;
             cursor: not-allowed;
         }
-        /* Formation positions for 4-2-4 */
+
+        /* Formation positions for 4-2-4 (desktop) */
         .lw { top: 50px; left: 100px; }
         .st1 { top: 50px; left: 200px; }
         .st2 { top: 50px; left: 300px; }
@@ -124,19 +125,20 @@
         .cb2 { top: 370px; left: 300px; }
         .rb { top: 370px; left: 450px; }
         .gk { top: 500px; left: 250px; }
+
         /* Modal styling */
         .modal {
-            display: none; /* Başlangıçta gizli */
+            display: none; 
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 255, 99, 0.13); /* Background color */
+            background-color: rgba(0, 255, 99, 0.13); 
             z-index: 1000;
-            transition: background-color 0.5s ease; /* Geçiş efekti */
+            transition: background-color 0.5s ease; 
         }
         .modal.show {
-            display: flex; /* Modal'ı göster */
+            display: flex; 
         }
         .modal img {
             width: 80px;
@@ -144,22 +146,50 @@
             margin: 5px;
             cursor: pointer;
         }
+
+        /* Responsive styles for mobile */
+        @media (max-width: 768px) {
+            .field-container {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+            }
+
+            .player-card {
+                width: 80px;
+                height: 120px;
+                font-size: 0.9em;
+            }
+
+            /* Formation positions for mobile */
+            .lw { top: 10%; left: 15%; }
+            .st1 { top: 10%; left: 30%; }
+            .st2 { top: 10%; left: 50%; }
+            .rw { top: 10%; left: 70%; }
+            .cm1 { top: 30%; left: 25%; }
+            .cm2 { top: 30%; left: 55%; }
+            .lb { top: 50%; left: 10%; }
+            .cb1 { top: 50%; left: 30%; }
+            .cb2 { top: 50%; left: 50%; }
+            .rb { top: 50%; left: 80%; }
+            .gk { top: 70%; left: 40%; }
+        }
     </style>
 </head>
 <body>
 
-<!-- Açılış ekranı -->
+<!-- Splash Screen -->
 <div id="splash-screen">
     <div class="loading-bar-container">
         <div class="loading-bar" id="loading-bar"></div>
     </div>
     <div id="loading-text">Loading...</div>
     <button id="start-button" onclick="startGame()">Başla</button>
-    <div id="percentage-text">0%</div> <!-- Yüzde metni -->
+    <div id="percentage-text">0%</div>
 </div>
 
 <div class="field-container" id="field-container">
-    <h1>FUT Draft Oyunu - 4-2-4 Dizilişi</h1>
+    <h1>MoRnD DRAFT</h1>
     <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
     <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
     <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
@@ -173,7 +203,7 @@
     <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
 </div>
 
-<div id="modal" class="modal"></div> <!-- Başlangıçta görünmez -->
+<div id="modal" class="modal"></div>
 
 <script>
     const playerPhotos = {
@@ -187,7 +217,7 @@
         "kaleci": Array.from({ length: 8 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
     };
 
-    const selectedPlayers = new Set(); // To track selected players
+    const selectedPlayers = new Set();
 
     function startLoading() {
         const loadingBar = document.getElementById("loading-bar");
@@ -198,27 +228,27 @@
             if (width >= 100) {
                 clearInterval(loadingInterval);
                 setTimeout(() => {
-                    document.getElementById("start-button").style.display = "block"; // Başla butonunu göster
-                }, 500); // Kısa bir gecikme
+                    document.getElementById("start-button").style.display = "block"; 
+                }, 500);
             } else {
                 width++;
                 loadingBar.style.width = width + "%";
-                percentageText.innerText = width + "%"; // Yüzde metnini güncelle
+                percentageText.innerText = width + "%"; 
             }
-        }, 50); // Her 50 ms'de bir yükleme çubuğunu güncelle
+        }, 50);
     }
 
     function startGame() {
-        document.getElementById("splash-screen").style.display = "none"; // Açılış ekranını gizle
-        document.getElementById("field-container").style.display = "block"; // Oyun alanını göster
+        document.getElementById("splash-screen").style.display = "none"; 
+        document.getElementById("field-container").style.display = "block"; 
     }
 
     function selectPlayer(cardElement, position) {
         if (cardElement.classList.contains('selected')) return;
 
         const modal = document.getElementById("modal");
-        modal.innerHTML = ""; // Modal'ı temizle
-        modal.classList.add("show"); // Modal'ı göster
+        modal.innerHTML = ""; 
+        modal.classList.add("show"); 
         
         const photos = playerPhotos[position];
         const selectedPhotos = [];
@@ -227,13 +257,11 @@
             const randomIndex = Math.floor(Math.random() * photos.length);
             const photo = photos[randomIndex];
             
-            // Check if the player has already been selected
             if (!selectedPlayers.has(photo)) {
                 selectedPhotos.push(photo);
-                selectedPlayers.add(photo); // Add the player to the selected set
+                selectedPlayers.add(photo); 
             }
             
-            // If we can't find enough unique players, break to avoid infinite loop
             if (selectedPhotos.length >= photos.length) {
                 break;
             }
@@ -252,7 +280,7 @@
         cardElement.style.backgroundImage = `url(${selectedPhoto})`;
         cardElement.innerText = "";
         
-        document.getElementById("modal").classList.remove("show"); // Modal'ı gizle
+        document.getElementById("modal").classList.remove("show"); 
     }
 
     // Sayfa yüklendiğinde yükleme işlemini başlat
