@@ -232,7 +232,7 @@
 
     <!-- Oyun alanı -->
     <div class="field-container" id="field-container">
-        <h1>FC Draft Simülatörü - 4-2-4</h1>
+        <h1>Test</h1></h1>
         <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
         <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
         <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
@@ -249,17 +249,17 @@
     <!-- Oyuncu seçim modalı -->
     <div id="modal" class="modal"></div>
 
-    <script>
-        const playerPhotos = {
-            "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://via.placeholder.com/90x130?text=Sol+Kanat+${i+1}`),
-            "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://via.placeholder.com/90x130?text=Sağ+Kanat+${i+1}`),
-            "santrafor": Array.from({ length: 10 }, (_, i) => `https://via.placeholder.com/90x130?text=Santrafor+${i+1}`),
-            "sol-bek": Array.from({ length: 6 }, (_, i) => `https://via.placeholder.com/90x130?text=Sol+Bek+${i+1}`),
-            "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://via.placeholder.com/90x130?text=Sağ+Bek+${i+1}`),
-            "gobek": Array.from({ length: 9 }, (_, i) => `https://via.placeholder.com/90x130?text=Orta+Saha+${i+1}`),
-            "stoper": Array.from({ length: 5 }, (_, i) => `https://via.placeholder.com/90x130?text=Stoper+${i+1}`),
-            "kaleci": Array.from({ length: 5 }, (_, i) => `https://via.placeholder.com/90x130?text=Kaleci+${i+1}`)
-        };
+<script>
+    const playerPhotos = {
+        "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20kanatlar/${i+1}.png`),
+        "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
+        "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
+        "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
+        "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
+        "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
+        "stoper": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
+        "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
+    };
 
         const selectedPlayers = {
             "santrafor": [],
