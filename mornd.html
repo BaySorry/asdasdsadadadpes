@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FC Draft Simülatörü - iOS 26 Teması</title>
+    <title>FC Draft</title>
     <style>
         /* Genel sıfırlama ve stil */
         * {
@@ -20,6 +20,7 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            transform: scale(0.9); /* Genel ölçeği biraz küçülttük */
         }
 
         /* Animasyonlar */
@@ -91,13 +92,13 @@
 
         /* Oyun alanı */
         .field-container {
-            background: url('https://via.placeholder.com/600x700?text=Saha+Arka+Planı') no-repeat center/cover;
-            width: 650px;
-            height: 750px;
+            background: url('https://via.placeholder.com/550x650?text=Saha+Arka+Planı') no-repeat center/cover;
+            width: 550px;
+            height: 650px;
             border-radius: 20px;
             padding: 20px;
             position: relative;
-            display: a;
+            display: none;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             animation: fadeIn 0.5s ease-out;
         }
@@ -108,15 +109,15 @@
             text-align: center;
             margin-bottom: 20px;
             color: #007aff;
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: 600;
             text-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         /* Oyuncu kartları */
         .player-card {
-            width: 100px;
-            height: 140px;
+            width: 90px;
+            height: 130px;
             background: #fff;
             border: 2px solid #ccc;
             border-radius: 15px;
@@ -125,10 +126,11 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1em;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
             background-size: cover;
+            background-position: center;
         }
         .player-card:hover {
             transform: scale(1.05);
@@ -140,20 +142,22 @@
             border-color: #0056b3;
             cursor: not-allowed;
             animation: pulse 1.5s infinite;
+            background-size: cover; /* Fotoğraf kart boyutuna sığar */
+            background-position: center;
         }
 
         /* Pozisyonlar */
-        .lw { top: 50px; left: 100px; }
-        .st1 { top: 50px; left: 200px; }
-        .st2 { top: 50px; left: 300px; }
-        .rw { top: 50px; left: 400px; }
-        .cm1 { top: 200px; left: 150px; }
-        .cm2 { top: 200px; left: 350px; }
-        .lb { top: 370px; left: 50px; }
-        .cb1 { top: 370px; left: 200px; }
-        .cb2 { top: 370px; left: 300px; }
-        .rb { top: 370px; left: 450px; }
-        .gk { top: 500px; left: 250px; }
+        .lw { top: 40px; left: 80px; }
+        .st1 { top: 40px; left: 180px; }
+        .st2 { top: 40px; left: 280px; }
+        .rw { top: 40px; left: 380px; }
+        .cm1 { top: 180px; left: 130px; }
+        .cm2 { top: 180px; left: 330px; }
+        .lb { top: 340px; left: 40px; }
+        .cb1 { top: 340px; left: 180px; }
+        .cb2 { top: 340px; left: 280px; }
+        .rb { top: 340px; left: 420px; }
+        .gk { top: 480px; left: 230px; }
 
         /* Modal */
         .modal {
@@ -178,11 +182,12 @@
             gap: 10px;
         }
         .modal img {
-            width: 90px;
-            height: 130px;
+            width: 80px;
+            height: 120px;
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
+            object-fit: cover; /* Modal içindeki resimler de sığar */
         }
         .modal img:hover {
             transform: scale(1.1);
@@ -191,63 +196,65 @@
 
         /* Mobil uyumluluk */
         @media (max-width: 768px) {
-            h1 { font-size: 1.5em; }
+            h1 { font-size: 1.4em; }
             .field-container {
                 width: 90%;
                 height: auto;
                 padding: 15px;
             }
             .player-card {
-                width: 70px;
-                height: 100px;
-                font-size: 0.9em;
+                width: 60px;
+                height: 90px;
+                font-size: 0.8em;
             }
-            .lw { top: 30px; left: 10%; }
-            .st1 { top: 30px; left: 30%; }
-            .st2 { top: 30px; left: 50%; }
-            .rw { top: 30px; left: 70%; }
-            .cm1 { top: 150px; left: 25%; }
-            .cm2 { top: 150px; left: 55%; }
-            .lb { top: 270px; left: 5%; }
-            .cb1 { top: 270px; left: 30%; }
-            .cb2 { top: 270px; left: 55%; }
-            .rb { top: 270px; left: 80%; }
-            .gk { top: 390px; left: 45%; }
+            .lw { top: 20px; left: 8%; }
+            .st1 { top: 20px; left: 28%; }
+            .st2 { top: 20px; left: 48%; }
+            .rw { top: 20px; left: 68%; }
+            .cm1 { top: 120px; left: 23%; }
+            .cm2 { top: 120px; left: 53%; }
+            .lb { top: 240px; left: 3%; }
+            .cb1 { top: 240px; left: 28%; }
+            .cb2 { top: 240px; left: 53%; }
+            .rb { top: 240px; left: 78%; }
+            .gk { top: 360px; left: 43%; }
             .modal img {
-                width: 70px;
-                height: 100px;
+                width: 60px;
+                height: 90px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Açılış ekranı -->
-    <div id="splash-screen">
-        <div id="loading-text">Yükleniyor...</div>
-        <div class="loading-bar-container">
-            <div class="loading-bar" id="loading-bar"></div>
-        </div>
-        <button id="start-button" onclick="startGame()">Draft'a Başla</button>
-    </div>
+   入り
 
-    <!-- Oyun alanı -->
-    <div class="field-container" id="field-container">
-        <h1>Test</h1></h1>
-        <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
-        <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
-        <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
-        <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
-        <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
-        <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
-        <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
-        <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
-        <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
-        <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
-        <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
+System: <!-- Açılış ekranı -->
+<div id="splash-screen">
+    <div id="loading-text">Yükleniyor...</div>
+    <div class="loading-bar-container">
+        <div class="loading-bar" id="loading-bar"></div>
     </div>
+    <button id="start-button" onclick="startGame()">Draft'a Başla</button>
+</div>
 
-    <!-- Oyuncu seçim modalı -->
-    <div id="modal" class="modal"></div>
+<!-- Oyun alanı -->
+<div class="field-container" id="field-container">
+    <h1>FC Draft</h1>
+    <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
+    <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
+    <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
+    <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
+    <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
+    <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
+    <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
+    <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
+    <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
+    <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
+    <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
+</div>
+
+<!-- Oyuncu seçim modalı -->
+<div id="modal" class="modal"></div>
 
 <script>
     const playerPhotos = {
@@ -261,77 +268,40 @@
         "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
     };
 
-        const selectedPlayers = {
-            "santrafor": [],
-            "gobek": [],
-            "sol-kanat": null,
-            "sağ-kanat": null,
-            "sol-bek": null,
-            "sağ-bek": null,
-            "stoper": [],
-            "kaleci": null,
-        };
+    const selectedPlayers = {
+        "santrafor": [],
+        "gobek": [],
+        "sol-kanat": null,
+        "sağ-kanat": null,
+        "sol-bek": null,
+        "sağ-bek": null,
+        "stoper": [],
+        "kaleci": null,
+    };
 
-        function startLoading() {
-            const loadingBar = document.getElementById("loading-bar");
-            let width = 0;
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    document.getElementById("start-button").style.display = "block";
-                } else {
-                    width++;
-                    loadingBar.style.width = width + "%";
-                }
-            }, 50);
-        }
-
-        function startGame() {
-            const splash = document.getElementById("splash-screen");
-            splash.classList.add("fade-out");
-            setTimeout(() => {
-                splash.style.display = "none";
-                document.getElementById("field-container").classList.add("show");
-            }, 500);
-        }
-
-        function selectPlayer(cardElement, position) {
-            if (cardElement.classList.contains("selected")) return;
-            const modal = document.getElementById("modal");
-            modal.innerHTML = "";
-            modal.classList.add("show");
-            const photos = playerPhotos[position];
-            const selectedPhotos = [];
-            const allSelectedPhotos = Object.values(selectedPlayers).flat();
-            const availablePhotos = photos.filter(p => !allSelectedPhotos.includes(p));
-            while (selectedPhotos.length < Math.min(4, availablePhotos.length)) {
-                const randomIndex = Math.floor(Math.random() * availablePhotos.length);
-                const photo = availablePhotos[randomIndex];
-                if (!selectedPhotos.includes(photo)) {
-                    selectedPhotos.push(photo);
-                }
-            }
-            selectedPhotos.forEach(photo => {
-                const img = document.createElement("img");
-                img.src = photo;
-                img.onclick = () => finalizeSelection(cardElement, position, photo);
-                modal.appendChild(img);
-            });
-        }
-
-        function finalizeSelection(cardElement, position, photo) {
-            cardElement.classList.add("selected");
-            cardElement.style.backgroundImage = `url(${photo})`;
-            cardElement.innerText = "";
-            if (position === "santrafor" || position === "gobek" || position === "stoper") {
-                selectedPlayers[position].push(photo);
+    function startLoading() {
+        const loadingBar = document.getElementById("loading-bar");
+        let width = 0;
+        const interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                document.getElementById("start-button").style.display = "block";
             } else {
-                selectedPlayers[position] = photo;
+                width++;
+                loadingBar.style.width = width + "%";
             }
-            document.getElementById("modal").classList.remove("show");
-        }
+        }, 50);
+    }
 
-        window.onload = startLoading;
-    </script>
-</body>
-</html>
+    function startGame() {
+        const splash = document.getElementById("splash-screen");
+        splash.classList.add("fade-out");
+        setTimeout(() => {
+            splash.style.display = "none";
+            document.getElementById("field-container").classList.add("show");
+        }, 500);
+    }
+
+    function selectPlayer(cardElement, position) {
+        if (cardElement.classList.contains("selected")) return;
+        const modal =
