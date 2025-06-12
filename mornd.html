@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FC Draft</title>
     <style>
-        /* Genel sıfırlama ve stil */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -20,10 +19,8 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            transform: scale(0.9); /* Genel ölçeği biraz küçülttük */
         }
 
-        /* Animasyonlar */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -34,7 +31,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Açılış ekranı */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -55,7 +51,7 @@
         }
         .loading-bar-container {
             width: 80%;
-            max-width: 400px;
+            max-width: 350px;
             background: #e0e0e0;
             border-radius: 12px;
             overflow: hidden;
@@ -69,14 +65,14 @@
         }
         #loading-text {
             margin: 20px 0;
-            font-size: 1.8em;
+            font-size: 1.6em;
             color: #007aff;
             font-weight: 600;
         }
         #start-button {
             display: none;
             padding: 12px 24px;
-            font-size: 1.2em;
+            font-size: 1.1em;
             background: linear-gradient(90deg, #007aff, #4cd964);
             color: #fff;
             border: none;
@@ -90,13 +86,12 @@
             animation: pulse 1s infinite;
         }
 
-        /* Oyun alanı */
         .field-container {
-            background: url('https://via.placeholder.com/550x650?text=Saha+Arka+Planı') no-repeat center/cover;
-            width: 550px;
-            height: 650px;
+            background: url('https://via.placeholder.com/500x600?text=Saha+Arka+Planı') no-repeat center/cover;
+            width: 500px;
+            height: 600px;
             border-radius: 20px;
-            padding: 20px;
+            padding: 15px;
             position: relative;
             display: none;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
@@ -107,17 +102,16 @@
         }
         h1 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #007aff;
-            font-size: 1.8em;
+            font-size: 1.6em;
             font-weight: 600;
             text-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Oyuncu kartları */
         .player-card {
-            width: 90px;
-            height: 130px;
+            width: 80px;
+            height: 120px;
             background: #fff;
             border: 2px solid #ccc;
             border-radius: 15px;
@@ -126,7 +120,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1em;
+            font-size: 0.9em;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
             background-size: cover;
@@ -142,24 +136,22 @@
             border-color: #0056b3;
             cursor: not-allowed;
             animation: pulse 1.5s infinite;
-            background-size: cover; /* Fotoğraf kart boyutuna sığar */
+            background-size: cover;
             background-position: center;
         }
 
-        /* Pozisyonlar */
-        .lw { top: 40px; left: 80px; }
-        .st1 { top: 40px; left: 180px; }
-        .st2 { top: 40px; left: 280px; }
-        .rw { top: 40px; left: 380px; }
-        .cm1 { top: 180px; left: 130px; }
-        .cm2 { top: 180px; left: 330px; }
-        .lb { top: 340px; left: 40px; }
-        .cb1 { top: 340px; left: 180px; }
-        .cb2 { top: 340px; left: 280px; }
-        .rb { top: 340px; left: 420px; }
-        .gk { top: 480px; left: 230px; }
+        .lw { top: 30px; left: 70px; }
+        .st1 { top: 30px; left: 160px; }
+        .st2 { top: 30px; left: 250px; }
+        .rw { top: 30px; left: 340px; }
+        .cm1 { top: 160px; left: 120px; }
+        .cm2 { top: 160px; left: 300px; }
+        .lb { top: 310px; left: 30px; }
+        .cb1 { top: 310px; left: 160px; }
+        .cb2 { top: 310px; left: 250px; }
+        .rb { top: 310px; left: 390px; }
+        .gk { top: 450px; left: 210px; }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -167,7 +159,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
+            padding: 15px;
             border-radius: 20px;
             z-index: 2000;
             max-height: 80vh;
@@ -182,126 +174,180 @@
             gap: 10px;
         }
         .modal img {
-            width: 80px;
-            height: 120px;
+            width: 70px;
+            height: 100px;
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            object-fit: cover; /* Modal içindeki resimler de sığar */
+            object-fit: cover;
         }
         .modal img:hover {
             transform: scale(1.1);
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Mobil uyumluluk */
         @media (max-width: 768px) {
-            h1 { font-size: 1.4em; }
+            h1 { font-size: 1.3em; }
             .field-container {
                 width: 90%;
                 height: auto;
-                padding: 15px;
+                padding: 10px;
             }
             .player-card {
-                width: 60px;
-                height: 90px;
-                font-size: 0.8em;
+                width: 55px;
+                height: 80px;
+                font-size: 0.7em;
             }
-            .lw { top: 20px; left: 8%; }
-            .st1 { top: 20px; left: 28%; }
-            .st2 { top: 20px; left: 48%; }
-            .rw { top: 20px; left: 68%; }
-            .cm1 { top: 120px; left: 23%; }
-            .cm2 { top: 120px; left: 53%; }
-            .lb { top: 240px; left: 3%; }
-            .cb1 { top: 240px; left: 28%; }
-            .cb2 { top: 240px; left: 53%; }
-            .rb { top: 240px; left: 78%; }
-            .gk { top: 360px; left: 43%; }
+            .lw { top: 15px; left: 8%; }
+            .st1 { top: 15px; left: 28%; }
+            .st2 { top: 15px; left: 48%; }
+            .rw { top: 15px; left: 68%; }
+            .cm1 { top: 100px; left: 23%; }
+            .cm2 { top: 100px; left: 53%; }
+            .lb { top: 200px; left: 3%; }
+            .cb1 { top: 200px; left: 28%; }
+            .cb2 { top: 200px; left: 53%; }
+            .rb { top: 200px; left: 78%; }
+            .gk { top: 300px; left: 43%; }
             .modal img {
-                width: 60px;
-                height: 90px;
+                width: 50px;
+                height: 70px;
             }
         }
     </style>
 </head>
 <body>
-   入り
-
-System: <!-- Açılış ekranı -->
-<div id="splash-screen">
-    <div id="loading-text">Yükleniyor...</div>
-    <div class="loading-bar-container">
-        <div class="loading-bar" id="loading-bar"></div>
+    <div id="splash-screen">
+        <div id="loading-text">Yükleniyor...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <button id="start-button" onclick="startGame()">Draft'a Başla</button>
     </div>
-    <button id="start-button" onclick="startGame()">Draft'a Başla</button>
-</div>
 
-<!-- Oyun alanı -->
-<div class="field-container" id="field-container">
-    <h1>FC Draft</h1>
-    <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
-    <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
-    <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
-    <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
-    <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
-    <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
-    <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
-    <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
-    <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
-    <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
-    <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
-</div>
+    <div class="field-container" id="field-container">
+        <h1>FC Draft</h1>
+        <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
+        <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
+        <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
+        <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
+        <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
+        <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
+        <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
+        <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
+        <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
+        <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
+        <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
+    </div>
 
-<!-- Oyuncu seçim modalı -->
-<div id="modal" class="modal"></div>
+    <div id="modal" class="modal"></div>
 
-<script>
-    const playerPhotos = {
-        "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20kanatlar/${i+1}.png`),
-        "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
-        "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
-        "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
-        "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
-        "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
-        "stoper": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
-        "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
-    };
+    <script>
+        const playerPhotos = {
+            "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20kanatlar/${i+1}.png`),
+            "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
+            "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
+            "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
+            "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
+            "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
+            "stoper": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
+            "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
+        };
 
-    const selectedPlayers = {
-        "santrafor": [],
-        "gobek": [],
-        "sol-kanat": null,
-        "sağ-kanat": null,
-        "sol-bek": null,
-        "sağ-bek": null,
-        "stoper": [],
-        "kaleci": null,
-    };
+        const selectedPlayers = {
+            "santrafor": [],
+            "gobek": [],
+            "sol-kanat": null,
+            "sağ-kanat": null,
+            "sol-bek": null,
+            "sağ-bek": null,
+            "stoper": [],
+            "kaleci": null,
+        };
 
-    function startLoading() {
-        const loadingBar = document.getElementById("loading-bar");
-        let width = 0;
-        const interval = setInterval(() => {
-            if (width >= 100) {
-                clearInterval(interval);
-                document.getElementById("start-button").style.display = "block";
-            } else {
-                width++;
-                loadingBar.style.width = width + "%";
+        function startLoading() {
+            const loadingBar = document.getElementById("loading-bar");
+            const startButton = document.getElementById("start-button");
+            let width = 0;
+            console.log("Yükleme başladı");
+
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    startButton.style.display = "block";
+                    console.log("Yükleme tamamlandı");
+                } else {
+                    width++;
+                    loadingBar.style.width = width + "%";
+                }
+            }, 30);
+
+            // Zaman aşımı: 5 saniye içinde tamamlanmazsa zorla tamamla
+            setTimeout(() => {
+                if (width < 100) {
+                    console.warn("Yükleme takıldı, zorla tamamlanıyor");
+                    clearInterval(interval);
+                    loadingBar.style.width = "100%";
+                    startButton.style.display = "block";
+                }
+            }, 5000);
+        }
+
+        function startGame() {
+            const splash = document.getElementById("splash-screen");
+            splash.classList.add("fade-out");
+            setTimeout(() => {
+                splash.style.display = "none";
+                document.getElementById("field-container").classList.add("show");
+                console.log("Oyun başladı");
+            }, 500);
+        }
+
+        function selectPlayer(cardElement, position) {
+            if (cardElement.classList.contains("selected")) return;
+            const modal = document.getElementById("modal");
+            modal.innerHTML = "";
+            modal.classList.add("show");
+            const photos = playerPhotos[position];
+            const selectedPhotos = [];
+            const allSelectedPhotos = Object.values(selectedPlayers).flat();
+            const availablePhotos = photos.filter(p => !allSelectedPhotos.includes(p));
+            console.log(`Pozisyon: ${position}, Kullanılabilir fotoğraflar: ${availablePhotos.length}`);
+
+            while (selectedPhotos.length < Math.min(4, availablePhotos.length)) {
+                const randomIndex = Math.floor(Math.random() * availablePhotos.length);
+                const photo = availablePhotos[randomIndex];
+                if (!selectedPhotos.includes(photo)) {
+                    selectedPhotos.push(photo);
+                }
             }
-        }, 50);
-    }
 
-    function startGame() {
-        const splash = document.getElementById("splash-screen");
-        splash.classList.add("fade-out");
-        setTimeout(() => {
-            splash.style.display = "none";
-            document.getElementById("field-container").classList.add("show");
-        }, 500);
-    }
+            selectedPhotos.forEach(photo => {
+                const img = document.createElement("img");
+                img.src = photo;
+                img.onerror = () => console.error(`Görsel yüklenemedi: ${photo}`);
+                img.onclick = () => finalizeSelection(cardElement, position, photo);
+                modal.appendChild(img);
+            });
+        }
 
-    function selectPlayer(cardElement, position) {
-        if (cardElement.classList.contains("selected")) return;
-        const modal =
+        function finalizeSelection(cardElement, position, photo) {
+            cardElement.classList.add("selected");
+            cardElement.style.backgroundImage = `url(${photo})`;
+            cardElement.innerText = "";
+            if (position === "santrafor" || position === "gobek" || position === "stoper") {
+                selectedPlayers[position].push(photo);
+            } else {
+                selectedPlayers[position] = photo;
+            }
+            document.getElementById("modal").classList.remove("show");
+            console.log(`Seçilen oyuncu: ${photo}, Pozisyon: ${position}`);
+        }
+
+        window.onload = () => {
+            console.log("Sayfa yüklendi");
+            startLoading();
+        };
+    </script>
+</body>
+</html>
