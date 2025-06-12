@@ -1,118 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draft</title>
+    <title>FC Draft Simülatörü - iOS 26 Teması</title>
     <style>
-        /* Page styling */
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #222;
-            color: white;
+        /* Genel sıfırlama ve stil */
+        * {
+            box-sizing: border-box;
             margin: 0;
-            height: 100vh;
+            padding: 0;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+            color: #333;
+            display: flex;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
             overflow: hidden;
         }
-        h1 {
-            margin-top: 20px;
-            font-size: 2em;
-            color: #FFD700;
+
+        /* Animasyonlar */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        /* Splash screen styling */
+        /* Açılış ekranı */
         #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            background-image: url('https://github.com/BaySorry/asdasdsadadadpes/blob/main/MoRnD-DRAFT.png?raw=true');
-            background-size: cover;
-            height: 100vh;
-            width: 100vw;
-            position: absolute;
-            z-index: 1000; /* Splash screen üstte olacak */
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            animation: fadeIn 0.5s ease-out;
         }
-
+        #splash-screen.fade-out {
+            opacity: 0;
+        }
         .loading-bar-container {
             width: 80%;
-            max-width: 300px;
-            background-color: #555;
-            border-radius: 5px;
+            max-width: 400px;
+            background: #e0e0e0;
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
         .loading-bar {
-            height: 20px;
+            height: 12px;
+            background: linear-gradient(90deg, #007aff, #4cd964);
             width: 0;
-            background-color: #FFD700;
-            transition: width 0.5s ease;
+            transition: width 0.5s linear;
         }
-
         #loading-text {
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            color: #FFD700;
+            margin: 20px 0;
+            font-size: 1.8em;
+            color: #007aff;
+            font-weight: 600;
         }
-
         #start-button {
-            display: none; /* Başla butonu gizli */
-            padding: 10px 20px;
-            font-size: 1em;
-            color: black;
-            background-color: #FFD700;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        #percentage-text {
+            display: none;
+            padding: 12px 24px;
             font-size: 1.2em;
-            color: #FFD700;
+            background: linear-gradient(90deg, #007aff, #4cd964);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        #start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: pulse 1s infinite;
         }
 
-        /* Field container styling */
+        /* Oyun alanı */
         .field-container {
-            background-image: url('https://www.example.com/field-background.jpg'); /* Replace with actual field background URL */
-            background-size: cover;
+            background: url('https://via.placeholder.com/600x700?text=Saha+Arka+Planı') no-repeat center/cover;
+            width: 650px;
+            height: 750px;
+            border-radius: 20px;
             padding: 20px;
-            border-radius: 15px;
-            width: 600px;
-            height: 700px;
             position: relative;
-            display: none; /* Başlangıçta gizli */
+            display: a;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+        .field-container.show {
+            display: block;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007aff;
+            font-size: 2em;
+            font-weight: 600;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Player card styling */
+        /* Oyuncu kartları */
         .player-card {
             width: 100px;
             height: 140px;
-            background-color: #1f1f1f;
-            border: 3px solid #3fa64a; /* Green outline */
-            border-radius: 10px;
+            background: #fff;
+            border: 2px solid #ccc;
+            border-radius: 15px;
             position: absolute;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-weight: bold;
             font-size: 1.1em;
             cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
             background-size: cover;
         }
-        .player-card.selected {
-            background-color: #FFD700; /* Selected card in gold */
-            color: black;
-            cursor: not-allowed;
+        .player-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        /* Formation positions for 4-2-4 */
+        .player-card.selected {
+            background: linear-gradient(90deg, #007aff, #4cd964);
+            color: #fff;
+            border-color: #0056b3;
+            cursor: not-allowed;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Pozisyonlar */
         .lw { top: 50px; left: 100px; }
         .st1 { top: 50px; left: 200px; }
         .st2 { top: 50px; left: 300px; }
@@ -124,171 +154,184 @@
         .cb2 { top: 370px; left: 300px; }
         .rb { top: 370px; left: 450px; }
         .gk { top: 500px; left: 250px; }
-        /* Modal styling */
+
+        /* Modal */
         .modal {
-            display: none; /* Başlangıçta gizli */
+            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 255, 99, 0.13); /* Background color */
-            z-index: 1000;
-            transition: background-color 0.5s ease; /* Geçiş efekti */
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 20px;
+            z-index: 2000;
+            max-height: 80vh;
             overflow-y: auto;
-            max-height: 80%; /* Modal'da içerik aşımını önlemek için */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease;
         }
         .modal.show {
-            display: flex; /* Modal'ı göster */
-            flex-wrap: wrap; /* Resimleri yan yana diz */
-            justify-content: center; /* Merkeze yerleştir */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
         }
         .modal img {
-            width: 80px;
-            height: 120px;
-            margin: 5px;
+            width: 90px;
+            height: 130px;
+            border-radius: 10px;
             cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .modal img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        /* Mobile styles */
+        /* Mobil uyumluluk */
         @media (max-width: 768px) {
+            h1 { font-size: 1.5em; }
             .field-container {
-                width: 90%; /* Mobile width */
-                height: auto; /* Let it adjust */
+                width: 90%;
+                height: auto;
+                padding: 15px;
             }
             .player-card {
-                width: 70px; /* Adjust player card size for mobile */
+                width: 70px;
                 height: 100px;
+                font-size: 0.9em;
             }
-            h1 {
-                font-size: 1.5em; /* Smaller title for mobile */
+            .lw { top: 30px; left: 10%; }
+            .st1 { top: 30px; left: 30%; }
+            .st2 { top: 30px; left: 50%; }
+            .rw { top: 30px; left: 70%; }
+            .cm1 { top: 150px; left: 25%; }
+            .cm2 { top: 150px; left: 55%; }
+            .lb { top: 270px; left: 5%; }
+            .cb1 { top: 270px; left: 30%; }
+            .cb2 { top: 270px; left: 55%; }
+            .rb { top: 270px; left: 80%; }
+            .gk { top: 390px; left: 45%; }
+            .modal img {
+                width: 70px;
+                height: 100px;
             }
         }
     </style>
 </head>
 <body>
-
-<!-- Açılış ekranı -->
-<div id="splash-screen">
-    <div class="loading-bar-container">
-        <div class="loading-bar" id="loading-bar"></div>
+    <!-- Açılış ekranı -->
+    <div id="splash-screen">
+        <div id="loading-text">Yükleniyor...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <button id="start-button" onclick="startGame()">Draft'a Başla</button>
     </div>
-    <div id="loading-text">Loading...</div>
-    <button id="start-button" onclick="startGame()">Başla</button>
-    <div id="percentage-text">0%</div> <!-- Yüzde metni -->
-</div>
 
-<div class="field-container" id="field-container">
-    <h1>FUT Draft Oyunu - 4-2-4 Dizilişi</h1>
-    <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
-    <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
-    <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
-    <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
-    <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
-    <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
-    <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
-    <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
-    <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
-    <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
-    <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
-</div>
+    <!-- Oyun alanı -->
+    <div class="field-container" id="field-container">
+        <h1>FC Draft Simülatörü - 4-2-4</h1>
+        <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
+        <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
+        <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
+        <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
+        <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
+        <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
+        <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
+        <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
+        <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
+        <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
+        <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
+    </div>
 
-<div id="modal" class="modal"></div> <!-- Başlangıçta görünmez -->
+    <!-- Oyuncu seçim modalı -->
+    <div id="modal" class="modal"></div>
 
-<script>
-    const playerPhotos = {
-        "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20kanatlar/${i+1}.png`),
-        "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
-        "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
-        "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
-        "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
-        "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
-        "stoper": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
-        "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
-    };
+    <script>
+        const playerPhotos = {
+            "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://via.placeholder.com/90x130?text=Sol+Kanat+${i+1}`),
+            "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://via.placeholder.com/90x130?text=Sağ+Kanat+${i+1}`),
+            "santrafor": Array.from({ length: 10 }, (_, i) => `https://via.placeholder.com/90x130?text=Santrafor+${i+1}`),
+            "sol-bek": Array.from({ length: 6 }, (_, i) => `https://via.placeholder.com/90x130?text=Sol+Bek+${i+1}`),
+            "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://via.placeholder.com/90x130?text=Sağ+Bek+${i+1}`),
+            "gobek": Array.from({ length: 9 }, (_, i) => `https://via.placeholder.com/90x130?text=Orta+Saha+${i+1}`),
+            "stoper": Array.from({ length: 5 }, (_, i) => `https://via.placeholder.com/90x130?text=Stoper+${i+1}`),
+            "kaleci": Array.from({ length: 5 }, (_, i) => `https://via.placeholder.com/90x130?text=Kaleci+${i+1}`)
+        };
 
-    const selectedPlayers = { // To track selected players per position
-        "santrafor": [], // Allow multiple selections for strikers
-        "gobek": null,
-        "sol-kanat": null,
-        "sağ-kanat": null,
-        "sol-bek": null,
-        "sağ-bek": null,
-        "stoper": null,
-        "kaleci": null,
-    };
+        const selectedPlayers = {
+            "santrafor": [],
+            "gobek": [],
+            "sol-kanat": null,
+            "sağ-kanat": null,
+            "sol-bek": null,
+            "sağ-bek": null,
+            "stoper": [],
+            "kaleci": null,
+        };
 
-    function startLoading() {
-        const loadingBar = document.getElementById("loading-bar");
-        const percentageText = document.getElementById("percentage-text");
-        let width = 0;
+        function startLoading() {
+            const loadingBar = document.getElementById("loading-bar");
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    document.getElementById("start-button").style.display = "block";
+                } else {
+                    width++;
+                    loadingBar.style.width = width + "%";
+                }
+            }, 50);
+        }
 
-        const loadingInterval = setInterval(() => {
-            if (width >= 100) {
-                clearInterval(loadingInterval);
-                setTimeout(() => {
-                    document.getElementById("start-button").style.display = "block"; // Başla butonunu göster
-                }, 500); // Kısa bir gecikme
+        function startGame() {
+            const splash = document.getElementById("splash-screen");
+            splash.classList.add("fade-out");
+            setTimeout(() => {
+                splash.style.display = "none";
+                document.getElementById("field-container").classList.add("show");
+            }, 500);
+        }
+
+        function selectPlayer(cardElement, position) {
+            if (cardElement.classList.contains("selected")) return;
+            const modal = document.getElementById("modal");
+            modal.innerHTML = "";
+            modal.classList.add("show");
+            const photos = playerPhotos[position];
+            const selectedPhotos = [];
+            const allSelectedPhotos = Object.values(selectedPlayers).flat();
+            const availablePhotos = photos.filter(p => !allSelectedPhotos.includes(p));
+            while (selectedPhotos.length < Math.min(4, availablePhotos.length)) {
+                const randomIndex = Math.floor(Math.random() * availablePhotos.length);
+                const photo = availablePhotos[randomIndex];
+                if (!selectedPhotos.includes(photo)) {
+                    selectedPhotos.push(photo);
+                }
+            }
+            selectedPhotos.forEach(photo => {
+                const img = document.createElement("img");
+                img.src = photo;
+                img.onclick = () => finalizeSelection(cardElement, position, photo);
+                modal.appendChild(img);
+            });
+        }
+
+        function finalizeSelection(cardElement, position, photo) {
+            cardElement.classList.add("selected");
+            cardElement.style.backgroundImage = `url(${photo})`;
+            cardElement.innerText = "";
+            if (position === "santrafor" || position === "gobek" || position === "stoper") {
+                selectedPlayers[position].push(photo);
             } else {
-                width++;
-                loadingBar.style.width = width + "%";
-                percentageText.innerText = width + "%"; // Yüzde metnini güncelle
+                selectedPlayers[position] = photo;
             }
-        }, 50); // Her 50 ms'de bir yükleme çubuğunu güncelle
-    }
-
-    function startGame() {
-        document.getElementById("splash-screen").style.display = "none"; // Açılış ekranını gizle
-        document.getElementById("field-container").style.display = "block"; // Oyun alanını göster
-    }
-
-    function selectPlayer(cardElement, position) {
-        const modal = document.getElementById("modal");
-        modal.innerHTML = ""; // Modal'ı temizle
-        modal.classList.add("show"); // Modal'ı göster
-
-        const photos = playerPhotos[position];
-        const selectedPhotos = [];
-
-        // Filter out already selected players for the modal options
-        const allSelectedPhotos = Object.values(selectedPlayers).flat();
-        const availablePhotos = photos.filter(photo => !allSelectedPhotos.includes(photo));
-
-        // Randomly select up to 4 unique photos for the modal from available ones
-        while (selectedPhotos.length < Math.min(4, availablePhotos.length)) {
-            const randomIndex = Math.floor(Math.random() * availablePhotos.length);
-            const photo = availablePhotos[randomIndex];
-            if (!selectedPhotos.includes(photo)) {
-                selectedPhotos.push(photo);
-            }
+            document.getElementById("modal").classList.remove("show");
         }
 
-        selectedPhotos.forEach(photo => {
-            const img = document.createElement("img");
-            img.src = photo;
-            img.onclick = () => finalizeSelection(cardElement, position, photo);
-            modal.appendChild(img);
-        });
-    }
-
-    function finalizeSelection(cardElement, position, selectedPhoto) {
-        cardElement.classList.add("selected");
-        cardElement.style.backgroundImage = `url(${selectedPhoto})`;
-        cardElement.innerText = ""; // Hide the position text
-
-        // Allow multiple selections for strikers
-        if (position === "santrafor") {
-            selectedPlayers[position].push(selectedPhoto); // Store the selected player
-        } else {
-            // Ensure only one selection per position for others
-            selectedPlayers[position] = selectedPhoto; // Save the selected player for the specific position
-        }
-
-        document.getElementById("modal").classList.remove("show"); // Modal'ı gizle
-    }
-
-    // Sayfa yüklendiğinde yükleme işlemini başlat
-    window.onload = startLoading; 
-</script>
-
+        window.onload = startLoading;
+    </script>
 </body>
 </html>
