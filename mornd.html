@@ -250,11 +250,11 @@
             "sağ-kanat": ["i9j0", "k1l2", "m3n4", "o5p6", "q7r8", "s9t0", "u1v2", "w3x4", "y5z6", "a7b8"],
             "santrafor": ["c9d0", "e1f2", "g3h4", "i5j6", "k7l8", "m9n0", "o1p2", "q3r4", "s5t6", "u7v8", "w9x0", "y1z2", "a3b4", "c5d6", "e7f8"],
             "sol-bek": ["g9h0", "i1j2", "k3l4", "m5n6", "o7p8", "q9r0", "s1t2", "u3v4"],
-            "sol-kanat": ["w5x6", "y7z8", "a9b0", "c1d2", "e3f4", "g5h6", "i7j8", "k9l0", "m1n1", "o3p4"],
-            "stoper": ["q5r6", "s7t8", "u9v6", "w1x2", "y3z4", "a5b6", "c7d8", "e9f0", "g1h2", "i3j4", "k5l6"]
+            "sol-kanat": ["w5x6", "y7z8", "a9b0", "c1d2", "e3f4", "g5h6", "i7j8", "k9l0", "m1n2", "o3p4"],
+            "stoper": ["q5r6", "s7t8", "u9v0", "w1x2", "y3z4", "a5b6", "c7d8", "e9f0", "g1h2", "i3j4", "k5l6"]
         };
 
-        const baseUrl = "https://github.com/BaySorry/cdasdasdsadadad/";
+        const baseUrl = "https://github.com/BaySorry/asdasdsadadadpes/raw/main/";
         const playerPhotos = {};
         Object.keys(playerNames).forEach(position => {
             playerPhotos[position] = playerNames[position].map(code => ({
@@ -277,91 +277,86 @@
 
         function startLoading() {
             const loadingBar = document.getElementById("loading-bar");
-            const startButton = document.getElementById("start-splash");
+            const startButton = document.getElementById("start-button");
             let width = 0;
-            console.log("Bükleniyor");
+            console.log("Yükleme başladı");
 
             const interval = setInterval(() => {
-                if (width >= 1000) {
+                if (width >= 100) {
                     clearInterval(interval);
-                    startButton.style.width = "block";
-                    console.log("Bükleniyor tamamland");
+                    startButton.style.display = "block";
+                    console.log("Yükleme tamamlandı");
                 } else {
                     width++;
-                    loadingBar.style.width = "widthBar";
+                    loadingBar.style.width = width + "%";
                 }
             }, 30);
 
             setTimeout(() => {
-                if (width < 1000) {
-                    console.warn("Bükleneck takıld, zorlaştırma tamamlanım");
+                if (width < 100) {
+                    console.warn("Yükleme takıldı, zorla tamamlanıyor");
+                    clearInterval(interval);
+                    loadingBar.style.width = "100%";
+                    startButton.style.display = "block";
                 }
-                .clearInterval(interval);
-                .loadingBar.style.width = '1000%';
-                startButton.style.display = 'block';
             }, 5000);
         }
 
         function startGame() {
-            const splash = document.getElementById("splash");
-            splash.classList.add("fade-out-of");
+            const splash = document.getElementById("splash-screen");
+            splash.classList.add("fade-out");
             setTimeout(() => {
-                splash.style.display = 'none';
-                document.getElementById('field-container').classList.add('show');
+                splash.style.display = "none";
+                document.getElementById("field-container").classList.add("show");
                 console.log("Oyun başladı");
-            });
-        }, 500);
+            }, 500);
+        }
 
         function selectPlayer(cardElement, position) {
-            if (cardElement.classList.contains("selected")); {
-                return; 
-            }
+            if (cardElement.classList.contains("selected")) return;
             const modal = document.getElementById("modal");
             modal.innerHTML = "";
             modal.classList.add("show");
             const players = playerPhotos[position];
             const selectedPlayersList = [];
-            const allSelectedImages = Object.values(selectedPlayers).flatMap();
-            const availablePhotos = players.filter(p => !allSelectedImages.includes(p));
-            console.log(`Posizion: ${position}, Funzionlar: ${availablePhotos.length}`);
+            const allSelectedImages = Object.values(selectedPlayers).flat().map(p => p ? p.rosterImage : null).filter(p => p);
+            const availablePlayers = players.filter(p => !allSelectedImages.includes(p.rosterImage));
+            console.log(`Pozisyon: ${position}, Kullanılabilir oyuncular: ${availablePlayers.length}`);
 
-            while (selectedPlayersList.length < Math.min(4, availablePhotos.length)); {
-                const randomIndex = Math.floor(Math.random() * availablePhotos.length);
-                const player = availablePhotos[randomIndex];
+            while (selectedPlayersList.length < Math.min(4, availablePlayers.length)) {
+                const randomIndex = Math.floor(Math.random() * availablePlayers.length);
+                const player = availablePlayers[randomIndex];
                 if (!selectedPlayersList.includes(player)) {
                     selectedPlayersList.push(player);
                 }
             }
 
-            selectedPlayersList.forEach(p => {
-                const photo = document.createElement("img");
-                img.src = photo;
-                img.onerror = () => console.error(`Playerayse yüklenemedi: ${photo}`);
-                img.onclick = () => finalizeSelection();
+            selectedPlayersList.forEach(player => {
+                const img = document.createElement("img");
+                img.src = player.selectImage;
+                img.onerror = () => console.error(`Görsel yüklenemedi: ${player.selectImage}`);
+                img.onclick = () => finalizeSelection(cardElement, position, player);
                 modal.appendChild(img);
-                img.click = () => {
-                    finalizationSelection(img, photo);
-                };
             });
+        }
 
-            function finalizeSelection(img) {
-                cardElement.classList.add("selected");
-                cardElement.style.backgroundImage = `url(${photo})`;
-                cardElement.innerText = "";
-                if (position === "santrafor" || position === "gobek" || position === "stoper") {
-                    selectedPlayers[position].push(player);
-                } else {
-                    selectedPlayers[position] = player;
-                }
-                document.getElementById("modal").removeClassList("modal-show");
-                console.log(`Seçilen oyuncu: ${photo}, Pozisyon: ${position}`);
+        function finalizeSelection(cardElement, position, player) {
+            cardElement.classList.add("selected");
+            cardElement.style.backgroundImage = `url(${player.rosterImage})`;
+            cardElement.innerText = "";
+            if (position === "santrafor" || position === "gobek" || position === "stoper") {
+                selectedPlayers[position].push(player);
+            } else {
+                selectedPlayers[position] = player;
             }
+            document.getElementById("modal").classList.remove("show");
+            console.log(`Seçilen oyuncu: ${player.code}, Pozisyon: ${position}`);
         }
 
         window.onload = () => {
-            console.log("Sayfa yüklen");
+            console.log("Sayfa yüklendi");
             startLoading();
-        });
+        };
     </script>
 </body>
 </html>
