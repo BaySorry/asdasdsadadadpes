@@ -227,42 +227,52 @@
 
     <div class="field-container" id="field-container">
         <h1>FC Draft</h1>
-        <div class="player-card lw" onclick="selectPlayer(this, 'sol-kanat')">LW</div>
-        <div class="player-card st1" onclick="selectPlayer(this, 'santrafor')">ST</div>
-        <div class="player-card st2" onclick="selectPlayer(this, 'santrafor')">ST</div>
-        <div class="player-card rw" onclick="selectPlayer(this, 'sağ-kanat')">RW</div>
-        <div class="player-card cm1" onclick="selectPlayer(this, 'gobek')">CM</div>
-        <div class="player-card cm2" onclick="selectPlayer(this, 'gobek')">CM</div>
-        <div class="player-card lb" onclick="selectPlayer(this, 'sol-bek')">LB</div>
-        <div class="player-card cb1" onclick="selectPlayer(this, 'stoper')">CB</div>
-        <div class="player-card cb2" onclick="selectPlayer(this, 'stoper')">CB</div>
-        <div class="player-card rb" onclick="selectPlayer(this, 'sağ-bek')">RB</div>
-        <div class="player-card gk" onclick="selectPlayer(this, 'kaleci')">GK</div>
+        <div class="player-card lw" onclick="selectPlayer(this, 'sol kanatlar')">LW</div>
+        <div class="player-card st1" onclick="selectPlayer(this, 'santraforlar')">ST</div>
+        <div class="player-card st2" onclick="selectPlayer(this, 'santraforlar')">ST</div>
+        <div class="player-card rw" onclick="selectPlayer(this, 'sağ kanatlar')">RW</div>
+        <div class="player-card cm1" onclick="selectPlayer(this, 'göbekler')">CM</div>
+        <div class="player-card cm2" onclick="selectPlayer(this, 'göbekler')">CM</div>
+        <div class="player-card lb" onclick="selectPlayer(this, 'sol bekler')">LB</div>
+        <div class="player-card cb1" onclick="selectPlayer(this, 'stopperler')">CB</div>
+        <div class="player-card cb2" onclick="selectPlayer(this, 'stopperler')">CB</div>
+        <div class="player-card rb" onclick="selectPlayer(this, 'sağ bekler')">RB</div>
+        <div class="player-card gk" onclick="selectPlayer(this, 'kaleciler')">GK</div>
     </div>
 
     <div id="modal" class="modal"></div>
 
     <script>
-        const playerPhotos = {
-            "sol-kanat": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20kanatlar/${i+1}.png`),
-            "sağ-kanat": Array.from({ length: 7 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20kanatlar/${i+1}.png`),
-            "santrafor": Array.from({ length: 10 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/santraforlar/${i+1}.png`),
-            "sol-bek": Array.from({ length: 6 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sol%20bekler/${i+1}.png`),
-            "sağ-bek": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/sağ%20bekler/${i+1}.png`),
-            "gobek": Array.from({ length: 9 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/göbekler/${i+1}.png`),
-            "stoper": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/stopperler/${i+1}.png`),
-            "kaleci": Array.from({ length: 5 }, (_, i) => `https://github.com/BaySorry/asdasdsadadadpes/raw/main/kaleciler/${i+1}.png`)
+        const playerNames = {
+            "göbekler": ["x1y2", "a3b4", "c5d6", "e7f8", "g9h0", "i1j2", "k3l4", "m5n6", "o7p8"],
+            "kaleciler": ["p5q6", "r7s8", "t9u0", "v1w2", "x3y4", "z5a6", "b7c8", "d9e0", "f1g2", "h3i4", "j5k6", "l7m8", "n9o0", "q1r2", "s3t4"],
+            "sağ bekler": ["u5v6", "w7x8", "y9z0", "a1b2", "c3d4", "e5f6", "g7h8"],
+            "sağ kanatlar": ["i9j0", "k1l2", "m3n4", "o5p6", "q7r8", "s9t0", "u1v2", "w3x4", "y5z6", "a7b8"],
+            "santraforlar": ["q3r4", "e1f2", "c9d0", "s5t6", "u7v8", "w9x0", "y1z2", "a3b4", "c5d6", "e7f8", "g9h0", "i1j2", "k3l4", "m5n6", "o7p8"],
+            "sol bekler": ["g9h0", "i1j2", "k3l4", "m5n6", "o7p8", "q9r0", "s1t2", "u3v4"],
+            "sol kanatlar": ["w5x6", "y7z8", "a9b0", "c1d2", "e3f4", "g5h6", "i7j8", "k9l0", "m1n2", "o3p4"],
+            "stopperler": ["q5r6", "s7t8", "u9v0", "w1x2", "y3z4", "a5b6", "c7d8", "e9f0", "g1h2", "i3j4", "k5l6"]
         };
 
+        const baseUrl = "https://raw.githubusercontent.com/BaySorry/asdasdsadadadpes/main/";
+        const playerPhotos = {};
+        Object.keys(playerNames).forEach(position => {
+            playerPhotos[position] = playerNames[position].map(code => ({
+                code: code,
+                selectImage: `${baseUrl}${position}/${code}/1.png`,
+                rosterImage: `${baseUrl}${position}/${code}/2.png`
+            }));
+        });
+
         const selectedPlayers = {
-            "santrafor": [],
-            "gobek": [],
-            "sol-kanat": null,
-            "sağ-kanat": null,
-            "sol-bek": null,
-            "sağ-bek": null,
-            "stoper": [],
-            "kaleci": null,
+            "santraforlar": [],
+            "göbekler": [],
+            "sol kanatlar": null,
+            "sağ kanatlar": null,
+            "sol bekler": null,
+            "sağ bekler": null,
+            "stopperler": [],
+            "kaleciler": null,
         };
 
         function startLoading() {
@@ -282,7 +292,6 @@
                 }
             }, 30);
 
-            // Zaman aşımı: 5 saniye içinde tamamlanmazsa zorla tamamla
             setTimeout(() => {
                 if (width < 100) {
                     console.warn("Yükleme takıldı, zorla tamamlanıyor");
@@ -308,40 +317,40 @@
             const modal = document.getElementById("modal");
             modal.innerHTML = "";
             modal.classList.add("show");
-            const photos = playerPhotos[position];
-            const selectedPhotos = [];
-            const allSelectedPhotos = Object.values(selectedPlayers).flat();
-            const availablePhotos = photos.filter(p => !allSelectedPhotos.includes(p));
-            console.log(`Pozisyon: ${position}, Kullanılabilir fotoğraflar: ${availablePhotos.length}`);
+            const players = playerPhotos[position];
+            const selectedPlayersList = [];
+            const allSelectedImages = Object.values(selectedPlayers).flat().map(p => p ? p.rosterImage : null).filter(p => p);
+            const availablePlayers = players.filter(p => !allSelectedImages.includes(p.rosterImage));
+            console.log(`Pozisyon: ${position}, Kullanılabilir oyuncular: ${availablePlayers.length}`);
 
-            while (selectedPhotos.length < Math.min(4, availablePhotos.length)) {
-                const randomIndex = Math.floor(Math.random() * availablePhotos.length);
-                const photo = availablePhotos[randomIndex];
-                if (!selectedPhotos.includes(photo)) {
-                    selectedPhotos.push(photo);
+            while (selectedPlayersList.length < Math.min(4, availablePlayers.length)) {
+                const randomIndex = Math.floor(Math.random() * availablePlayers.length);
+                const player = availablePlayers[randomIndex];
+                if (!selectedPlayersList.includes(player)) {
+                    selectedPlayersList.push(player);
                 }
             }
 
-            selectedPhotos.forEach(photo => {
+            selectedPlayersList.forEach(player => {
                 const img = document.createElement("img");
-                img.src = photo;
-                img.onerror = () => console.error(`Görsel yüklenemedi: ${photo}`);
-                img.onclick = () => finalizeSelection(cardElement, position, photo);
+                img.src = player.selectImage;
+                img.onerror = () => console.error(`Görsel yüklenemedi: ${player.selectImage}`);
+                img.onclick = () => finalizeSelection(cardElement, position, player);
                 modal.appendChild(img);
             });
         }
 
-        function finalizeSelection(cardElement, position, photo) {
+        function finalizeSelection(cardElement, position, player) {
             cardElement.classList.add("selected");
-            cardElement.style.backgroundImage = `url(${photo})`;
+            cardElement.style.backgroundImage = `url(${player.rosterImage})`;
             cardElement.innerText = "";
-            if (position === "santrafor" || position === "gobek" || position === "stoper") {
-                selectedPlayers[position].push(photo);
+            if (position === "santraforlar" || position === "göbekler" || position === "stopperler") {
+                selectedPlayers[position].push(player);
             } else {
-                selectedPlayers[position] = photo;
+                selectedPlayers[position] = player;
             }
             document.getElementById("modal").classList.remove("show");
-            console.log(`Seçilen oyuncu: ${photo}, Pozisyon: ${position}`);
+            console.log(`Seçilen oyuncu: ${player.code}, Pozisyon: ${position}`);
         }
 
         window.onload = () => {
