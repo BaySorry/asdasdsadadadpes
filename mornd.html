@@ -131,13 +131,12 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         .player-card.selected {
-            background: linear-gradient(90deg, #007aff, #4cd964);
-            color: #fff;
-            border-color: #0056b3;
-            cursor: not-allowed;
-            animation: pulse 1.5s infinite;
+            border: 4px solid #00aaff; /* Mavi kenarlık */
             background-size: cover;
             background-position: center;
+        }
+        .player-card.selected.wing-back {
+            border: 4px solid #00ff7f; /* Yeşil kenarlık wing-back için */
         }
 
         .lw { top: 30px; left: 70px; }
@@ -226,7 +225,6 @@
     </div>
 
     <div class="field-container" id="field-container">
-        <h1>FC Draft</h1>
         <div class="player-card lw" onclick="selectPlayer(this, 'sol kanatlar')">LW</div>
         <div class="player-card st1" onclick="selectPlayer(this, 'santraforlar')">ST</div>
         <div class="player-card st2" onclick="selectPlayer(this, 'santraforlar')">ST</div>
@@ -257,11 +255,14 @@
         const baseUrl = "https://raw.githubusercontent.com/BaySorry/asdasdsadadadpes/main/";
         const playerPhotos = {};
         Object.keys(playerNames).forEach(position => {
-            playerPhotos[position] = playerNames[position].map(code => ({
-                code: code,
-                selectImage: `${baseUrl}${position}/${code}/1.png`,
-                rosterImage: `${baseUrl}${position}/${code}/2.png`
-            }));
+            playerPhotos[position] = playerNames[position].map(code => {
+                const encodedPosition = encodeURIComponent(position).replace(/'/g, "%27");
+                return {
+                    code: code,
+                    selectImage: `${baseUrl}${encodedPosition}/${code}/1.png`,
+                    rosterImage: `${baseUrl}${encodedPosition}/${code}/2.png`
+                };
+            });
         });
 
         const selectedPlayers = {
@@ -299,7 +300,7 @@
                     loadingBar.style.width = "100%";
                     startButton.style.display = "block";
                 }
-            }, 5000);
+            }, 10000); // Zaman aşımını 10 saniyeye çıkardım
         }
 
         function startGame() {
@@ -323,6 +324,11 @@
             const availablePlayers = players.filter(p => !allSelectedImages.includes(p.rosterImage));
             console.log(`Pozisyon: ${position}, Kullanılabilir oyuncular: ${availablePlayers.length}`);
 
+            if (availablePlayers.length === 0) {
+                console.error(`Pozisyon ${position} için kullanılabilir oyuncu yok`);
+                return;
+            }
+
             while (selectedPlayersList.length < Math.min(4, availablePlayers.length)) {
                 const randomIndex = Math.floor(Math.random() * availablePlayers.length);
                 const player = availablePlayers[randomIndex];
@@ -332,17 +338,31 @@
             }
 
             selectedPlayersList.forEach(player => {
-                const img = document.createElement("img");
+                const img = new Image();
                 img.src = player.selectImage;
+                img.onload = () => {
+                    const modalImg = document.createElement("img");
+                    modalImg.src = player.selectImage;
+                    modalImg.onerror = () => console.error(`Modal görsel yüklenemedi: ${player.selectImage}`);
+                    modalImg.onclick = () => finalizeSelection(cardElement, position, player);
+                    modal.appendChild(modalImg);
+                };
                 img.onerror = () => console.error(`Görsel yüklenemedi: ${player.selectImage}`);
-                img.onclick = () => finalizeSelection(cardElement, position, player);
-                modal.appendChild(img);
             });
         }
 
         function finalizeSelection(cardElement, position, player) {
             cardElement.classList.add("selected");
-            cardElement.style.backgroundImage = `url(${player.rosterImage})`;
+            const img = new Image();
+            img.src = player.rosterImage;
+            img.onload = () => {
+                cardElement.style.backgroundImage = `url(${player.rosterImage})`;
+                console.log(`Görsel yüklendi ve ayarlandı: ${player.rosterImage}`);
+            };
+            img.onerror = () => console.error(`Görsel yüklenemedi: ${player.rosterImage}`);
+            if (position === "sol bekler" || position === "sağ bekler" || position === "sol kanatlar" || position === "sağ kanatlar") {
+                cardElement.classList.add("wing-back");
+            }
             cardElement.innerText = "";
             if (position === "santraforlar" || position === "göbekler" || position === "stopperler") {
                 selectedPlayers[position].push(player);
